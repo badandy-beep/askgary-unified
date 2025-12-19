@@ -1,27 +1,19 @@
-/* © 2025 Noetic Dharma Group, LLC | www.noeticdharma.com | CONFIDENTIAL & PROPRIETARY */
+/* © 2025 Noetic Dharma Group, LLC | CONFIDENTIAL */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html, body, #root {
+  height: 100%;
+  width: 100%;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background: #0A1628;
-}
-
-#root {
-  min-height: 100vh;
+  color: #ffffff;
 }

@@ -1,10 +1,17 @@
 /* © 2025 Noetic Dharma Group, LLC | www.noeticdharma.com | CONFIDENTIAL & PROPRIETARY */
 
 import React, { useState } from 'react';
-import AskGaryCompleteDemo from './AskGaryCompleteDemo';
-import FeatureShowcase from './FeatureShowcase';
-import AudioFirstDemo from './AudioFirstDemo';
 import PinGate from './PinGate';
+
+// FAUX DEMOS (Presentation/Pre-filled)
+import AudioFirstDemo from './AudioFirstPresenter';
+import FeatureShowcaseDemo from './FeatureShowcase';
+import FullQuestionnaire from './FullQuestionnaire';
+import AskGaryCompleteDemo from './CompleteDemoIntegrated';
+
+// WORKING DEMOS
+import WorkingVoiceDemo from './WorkingVoiceDemo';
+import { DesktopApp, MobileApp } from './DesktopMobilePresentation';
 
 const COLORS = {
   primary: '#C41E3A',
@@ -15,63 +22,85 @@ const COLORS = {
   success: '#30D158',
 };
 
-// Demo items organized by category
-const DEMO_CATEGORIES = {
-  presentation: {
+// ═══════════════════════════════════════════════════════════════════════════════
+// DEMO CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const DEMO_COLUMNS = [
+  {
+    id: 'faux',
     title: 'Presentation Demos',
-    subtitle: 'Simulated walkthroughs',
+    subtitle: 'Pre-filled walkthroughs',
     icon: '🎭',
     items: [
       {
         id: 'audio-faux',
-        title: 'Audio-First Interview',
-        desc: 'Voice-to-text simulation',
+        title: 'Audio-Only Demo',
+        desc: 'Voice interview with presenter mode',
         icon: '🎙️',
         status: 'live',
         component: AudioFirstDemo,
       },
       {
-        id: 'complete-faux',
-        title: 'Complete Intake Flow',
-        desc: '7-phase questionnaire demo',
+        id: 'longform-faux',
+        title: 'Long-Form Questionnaire',
+        desc: 'All 7 phases with faux data',
         icon: '📋',
+        status: 'live',
+        component: FullQuestionnaire,
+      },
+      {
+        id: 'endtoend-faux',
+        title: 'End-to-End Demo',
+        desc: 'Audio → Review → Full intake',
+        icon: '🎯',
         status: 'live',
         component: AskGaryCompleteDemo,
       },
       {
         id: 'features',
         title: 'Feature Showcase',
-        desc: '18-screen walkthrough',
+        desc: '18-screen platform overview',
         icon: '📱',
         status: 'live',
-        component: FeatureShowcase,
+        component: FeatureShowcaseDemo,
       },
     ],
   },
-  working: {
+  {
+    id: 'working',
     title: 'Working Demos',
     subtitle: 'Live functional systems',
     icon: '⚡',
     items: [
       {
-        id: 'audio-live',
-        title: 'Live Voice Capture',
-        desc: 'Real speech-to-text',
+        id: 'audio-working',
+        title: 'Live Voice Recording',
+        desc: 'Real Web Speech API',
         icon: '🔴',
-        status: 'coming',
-        component: null,
+        status: 'live',
+        component: WorkingVoiceDemo,
       },
       {
-        id: 'form-live',
-        title: 'Live Intake Form',
-        desc: 'With uploads & capture',
-        icon: '✍️',
-        status: 'coming',
-        component: null,
+        id: 'desktop-working',
+        title: 'Desktop Presentation',
+        desc: 'With MP3 audio playback',
+        icon: '🖥️',
+        status: 'live',
+        component: DesktopApp,
+      },
+      {
+        id: 'mobile-working',
+        title: 'Mobile Presentation',
+        desc: 'Phone-optimized with audio',
+        icon: '📱',
+        status: 'live',
+        component: MobileApp,
       },
     ],
   },
-  sales: {
+  {
+    id: 'sales',
     title: 'Sales Materials',
     subtitle: 'Investment docs & decks',
     icon: '💼',
@@ -93,7 +122,7 @@ const DEMO_CATEGORIES = {
         component: null,
       },
       {
-        id: 'features-benefits',
+        id: 'features-pdf',
         title: 'Features & Benefits',
         desc: 'Product overview',
         icon: '✨',
@@ -102,7 +131,11 @@ const DEMO_CATEGORIES = {
       },
     ],
   },
-};
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DEMO SELECTOR
+// ═══════════════════════════════════════════════════════════════════════════════
 
 function DemoSelector({ onSelect, onLogout }) {
   return (
@@ -114,22 +147,13 @@ function DemoSelector({ onSelect, onLogout }) {
       boxSizing: 'border-box',
     }}>
       {/* Header */}
-      <div style={{
-        textAlign: 'center',
-        marginBottom: 20,
-        paddingTop: 8,
-      }}>
-        <div style={{
-          fontSize: 11,
-          color: COLORS.gold,
-          letterSpacing: 3,
-          marginBottom: 4,
-        }}>JUSTICE CASE MANAGEMENT AI PORTAL™</div>
-        <div style={{
-          fontSize: 20,
-          fontWeight: 700,
-          color: COLORS.white,
-        }}>Demo & Materials Hub</div>
+      <div style={{ textAlign: 'center', marginBottom: 20, paddingTop: 8 }}>
+        <div style={{ fontSize: 11, color: COLORS.gold, letterSpacing: 3, marginBottom: 4 }}>
+          1-800-ASK-GARY × NOETIC DHARMA
+        </div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: COLORS.white }}>
+          Justice Case Management AI Portal™
+        </div>
       </div>
 
       {/* Three Column Layout */}
@@ -140,8 +164,8 @@ function DemoSelector({ onSelect, onLogout }) {
         maxWidth: 1200,
         margin: '0 auto',
       }}>
-        {Object.entries(DEMO_CATEGORIES).map(([key, category]) => (
-          <div key={key} style={{
+        {DEMO_COLUMNS.map((column) => (
+          <div key={column.id} style={{
             background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: 16,
@@ -156,35 +180,24 @@ function DemoSelector({ onSelect, onLogout }) {
               paddingBottom: 12,
               borderBottom: '1px solid rgba(255,255,255,0.08)',
             }}>
-              <span style={{ fontSize: 22 }}>{category.icon}</span>
+              <span style={{ fontSize: 22 }}>{column.icon}</span>
               <div>
-                <div style={{
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: COLORS.white,
-                }}>{category.title}</div>
-                <div style={{
-                  fontSize: 11,
-                  color: COLORS.gray,
-                }}>{category.subtitle}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: COLORS.white }}>{column.title}</div>
+                <div style={{ fontSize: 11, color: COLORS.gray }}>{column.subtitle}</div>
               </div>
             </div>
 
             {/* Items */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {category.items.map((item) => (
+              {column.items.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => item.status === 'live' && onSelect(item.id)}
                   disabled={item.status !== 'live'}
                   style={{
                     width: '100%',
-                    background: item.status === 'live' 
-                      ? 'rgba(212,168,83,0.1)' 
-                      : 'rgba(255,255,255,0.02)',
-                    border: item.status === 'live'
-                      ? '1px solid rgba(212,168,83,0.3)'
-                      : '1px solid rgba(255,255,255,0.05)',
+                    background: item.status === 'live' ? 'rgba(212,168,83,0.1)' : 'rgba(255,255,255,0.02)',
+                    border: item.status === 'live' ? '1px solid rgba(212,168,83,0.3)' : '1px solid rgba(255,255,255,0.05)',
                     borderRadius: 10,
                     padding: '12px 14px',
                     cursor: item.status === 'live' ? 'pointer' : 'not-allowed',
@@ -199,8 +212,7 @@ function DemoSelector({ onSelect, onLogout }) {
                   <span style={{ fontSize: 20 }}>{item.icon}</span>
                   <div style={{ flex: 1 }}>
                     <div style={{
-                      fontSize: 14,
-                      fontWeight: 600,
+                      fontSize: 14, fontWeight: 600,
                       color: item.status === 'live' ? COLORS.white : 'rgba(255,255,255,0.5)',
                       marginBottom: 2,
                     }}>{item.title}</div>
@@ -213,13 +225,8 @@ function DemoSelector({ onSelect, onLogout }) {
                     <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 16 }}>→</span>
                   ) : (
                     <span style={{
-                      fontSize: 8,
-                      color: 'rgba(255,255,255,0.4)',
-                      background: 'rgba(255,255,255,0.1)',
-                      padding: '3px 6px',
-                      borderRadius: 4,
-                      textTransform: 'uppercase',
-                      fontWeight: 600,
+                      fontSize: 8, color: 'rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.1)',
+                      padding: '3px 6px', borderRadius: 4, textTransform: 'uppercase', fontWeight: 600,
                     }}>Soon</span>
                   )}
                 </button>
@@ -229,30 +236,37 @@ function DemoSelector({ onSelect, onLogout }) {
         ))}
       </div>
 
-      {/* Footer */}
+      {/* Presenter Mode Tip */}
       <div style={{
+        maxWidth: 600,
+        margin: '24px auto 0',
+        background: 'rgba(48, 209, 88, 0.1)',
+        border: '1px solid rgba(48, 209, 88, 0.25)',
+        borderRadius: 10,
+        padding: 12,
         textAlign: 'center',
-        marginTop: 24,
-        paddingBottom: 16,
       }}>
-        <button
-          onClick={onLogout}
-          style={{
-            background: 'transparent',
-            border: '1px solid rgba(255,255,255,0.15)',
-            color: 'rgba(255,255,255,0.4)',
-            padding: '10px 24px',
-            fontSize: 12,
-            borderRadius: 8,
-            cursor: 'pointer',
-            marginBottom: 16,
-          }}
-        >← Exit Portal</button>
+        <span style={{ fontSize: 14 }}>💡</span>
+        <span style={{ color: COLORS.success, fontSize: 13, fontWeight: 600, marginLeft: 8 }}>Presenter Mode:</span>
+        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12, marginLeft: 6 }}>
+          Double-tap or use arrow keys to advance demos quickly
+        </span>
+      </div>
+
+      {/* Footer */}
+      <div style={{ textAlign: 'center', marginTop: 24, paddingBottom: 16 }}>
+        <button onClick={onLogout} style={{
+          background: 'transparent',
+          border: '1px solid rgba(255,255,255,0.15)',
+          color: 'rgba(255,255,255,0.4)',
+          padding: '10px 24px',
+          fontSize: 12,
+          borderRadius: 8,
+          cursor: 'pointer',
+          marginBottom: 16,
+        }}>← Exit Portal</button>
         
-        <div style={{
-          fontSize: 10,
-          color: 'rgba(255,255,255,0.2)',
-        }}>
+        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)' }}>
           © 2025 Noetic Dharma Group • Confidential
         </div>
       </div>
@@ -260,11 +274,15 @@ function DemoSelector({ onSelect, onLogout }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// DEMO WRAPPER
+// ═══════════════════════════════════════════════════════════════════════════════
+
 function DemoWrapper({ demoId, onBack }) {
-  // Find the demo across all categories
+  // Find the demo across all columns
   let demo = null;
-  for (const category of Object.values(DEMO_CATEGORIES)) {
-    const found = category.items.find(d => d.id === demoId);
+  for (const column of DEMO_COLUMNS) {
+    const found = column.items.find(d => d.id === demoId);
     if (found) { demo = found; break; }
   }
 
@@ -301,6 +319,7 @@ function DemoWrapper({ demoId, onBack }) {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
+      {/* Floating Exit Button */}
       <button
         onClick={onBack}
         style={{
@@ -308,7 +327,7 @@ function DemoWrapper({ demoId, onBack }) {
           top: 12,
           left: 12,
           zIndex: 9999,
-          background: 'rgba(0,0,0,0.75)',
+          background: 'rgba(0,0,0,0.8)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           color: '#fff',
@@ -326,14 +345,20 @@ function DemoWrapper({ demoId, onBack }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════════════════════════════════════════════
+
 export default function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [currentDemo, setCurrentDemo] = useState(null);
 
+  // PIN Gate
   if (!authenticated) {
     return <PinGate onSuccess={() => setAuthenticated(true)} />;
   }
 
+  // Demo Selector
   if (!currentDemo) {
     return (
       <DemoSelector
@@ -343,6 +368,7 @@ export default function App() {
     );
   }
 
+  // Active Demo
   return (
     <DemoWrapper
       demoId={currentDemo}
