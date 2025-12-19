@@ -14,9 +14,9 @@ const PinGatePart1 = ({ onSuccess }) => {
   const [shake, setShake] = useState(false);
 
   // ========================================
-  // PASSCODE: STOPAUTISM
+  // PASSCODE: DHARMA
   // ========================================
-  const CORRECT_PIN = 'STOPAUTISM';
+  const CORRECT_PIN = 'DHARMA';
 
   const handleSubmit = (e) => {
     e.preventDefault();
